@@ -32,11 +32,17 @@ checkMsg msg = case messageText msg of
   Just text | hasEmoji text -> Just $ buildAction msg
   _                         -> Nothing
 
+whitelist :: Text
+whitelist = nfc (numbers <> apl)
+  where
+    numbers = "1234567890"
+    apl = "↕️↩️"
+
 buildAction :: Message -> Action
 buildAction msg = DeleteEmoji (chatId $ messageChat msg) (messageMessageId msg)
 
 hasEmoji :: Text -> Bool
-hasEmoji = T.any (property Emoji) . nfc
+hasEmoji = T.any (\c -> property EmojiPresentation c && not (T.elem c whitelist)) . nfc
 
 handleAction :: Action -> Model -> Eff Action Model
 handleAction action model = case action of
