@@ -1,0 +1,28 @@
+cabal-version:      2.4
+name:               anti-emoji-bot
+version:            0.1.0.0
+maintainer:         andreyborzenkov2002@gmail.com
+extra-source-files:
+
+
+executable haskell-stuff
+  main-is:            Main.hs
+  other-modules:
+
+  build-depends:
+    , base
+    , telegram-bot-simple
+    , text
+    , text-icu
+
+  ghc-options:
+    -Wall
+    -threaded
+    -rtsopts
+    -with-rtsopts=-N
+    -with-rtsopts=-qg
+    -with-rtsopts=-xn
+    -with-rtsopts=-A128m
+  hs-source-dirs:     app
+  default-language:   Haskell2010
+  default-extensions: OverloadedStrings
