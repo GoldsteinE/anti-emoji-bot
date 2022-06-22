@@ -33,10 +33,11 @@ checkMsg msg = case messageText msg of
   _                         -> Nothing
 
 whitelist :: Text
-whitelist = nfc (numbers <> apl)
+whitelist = nfc (numbers <> apl <> askii)
   where
     numbers = "1234567890"
     apl = "↕️↩️"
+    askii = "*"
 
 buildAction :: Message -> Action
 buildAction msg = DeleteEmoji (chatId $ messageChat msg) (messageMessageId msg)
