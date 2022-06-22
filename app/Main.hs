@@ -42,7 +42,7 @@ buildAction :: Message -> Action
 buildAction msg = DeleteEmoji (chatId $ messageChat msg) (messageMessageId msg)
 
 hasEmoji :: Text -> Bool
-hasEmoji = T.any (\c -> property EmojiPresentation c && not (T.elem c whitelist)) . nfc
+hasEmoji = T.any (\c -> property Emoji c && not (T.elem c whitelist)) . nfc
 
 handleAction :: Action -> Model -> Eff Action Model
 handleAction action model = case action of
