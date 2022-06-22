@@ -37,7 +37,7 @@ whitelist = nfc (numbers <> apl <> askii)
   where
     numbers = "1234567890"
     apl = "↕️↩️"
-    askii = "*"
+    askii = "*#"
 
 buildAction :: Message -> Action
 buildAction msg = DeleteEmoji (chatId $ messageChat msg) (messageMessageId msg)
