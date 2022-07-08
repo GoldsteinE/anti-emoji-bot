@@ -14,9 +14,22 @@ type Model = ()
 type UserName = Maybe Text
 
 data Action
-  = DeleteEmojiWithResend ChatId MessageId UserName (Maybe MessageId) Text
-  | DeleteEmojiWithDump ChatId MessageId UserName
-  | DeleteEmoji ChatId MessageId
+  = DeleteEmojiWithResend
+      { chatOfSender :: ChatId
+      , senderMessage :: MessageId
+      , nameOfUser :: UserName
+      , originalReply :: Maybe MessageId
+      , originalText :: Text
+      }
+  | DeleteEmojiWithDump
+      { chatOfSender :: ChatId
+      , senderMessage :: MessageId
+      , nameOfUser :: UserName
+      }
+  | DeleteEmoji
+      { chatOfSender :: ChatId
+      , senderMessage :: MessageId
+      }
 
 echoBot :: BotApp Model Action
 echoBot =
