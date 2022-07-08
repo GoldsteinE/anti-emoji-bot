@@ -14,7 +14,7 @@ type Model = ()
 type UserName = Maybe Text
 
 data Action
-  = DeleteEmojiWithResend ChatId MessageId UserName Text
+  = DeleteEmojiWithResend ChatId MessageId UserName (Maybe MessageId) Text
   | DeleteEmojiWithDump ChatId MessageId UserName
   | DeleteEmoji ChatId MessageId
 
@@ -40,7 +40,12 @@ checkMsg msg = case messageText msg of
 deduceAction :: Text -> Int -> Message -> Maybe Action
 deduceAction _ 0 _ = Nothing
 deduceAction t c msg | c > T.length t `div` 3 = Just $ buildDumpAction msg
-deduceAction t _ msg = Just $ buildAction msg t
+deduceAction t _ msg =
+  Just $
+    buildAction
+      msg
+      (messageMessageId <$> messageReplyToMessage msg)
+      t
 
 whitelist :: Text
 whitelist = nfc (numbers <> apl <> asсii <> unicode)
@@ -54,7 +59,7 @@ buildDumpAction :: Message -> Action
 buildDumpAction msg =
   getChatId'n'MessageId'n'UserName msg DeleteEmojiWithDump
 
-buildAction :: Message -> Text -> Action
+buildAction :: Message -> Maybe MessageId -> Text -> Action
 buildAction msg =
   getChatId'n'MessageId'n'UserName msg DeleteEmojiWithResend
 
@@ -73,14 +78,14 @@ isEmoji c = property Emoji c && not (T.elem c whitelist)
 
 handleAction :: Action -> Model -> Eff Action Model
 handleAction action model = case action of
-  DeleteEmojiWithResend chat msg user text ->
+  DeleteEmojiWithResend chat msg user r text ->
     model <# do
       let newMsg = bulidMsg user text
-      sendMsgTo newMsg chat
+      sendMsgTo newMsg chat r
       pure (DeleteEmoji chat msg)
   DeleteEmojiWithDump chat msg user ->
     model <# do
-      sendMsgTo (buildDump user) chat
+      sendMsgTo (buildDump user) chat Nothing
       pure (DeleteEmoji chat msg)
   DeleteEmoji chat msg ->
     model <# do
@@ -91,8 +96,8 @@ buildDump Nothing = "Я не понимаю, что происходит"
 buildDump (Just user) =
   user <> " попытался отправить эмодзи, но доблестные силы контр-разведки его перехватили. Literally 1984!"
 
-sendMsgTo :: Text -> ChatId -> BotM ()
-sendMsgTo msg chat =
+sendMsgTo :: Text -> ChatId -> Maybe MessageId -> BotM ()
+sendMsgTo msg chat r =
   void . liftClientM $
     sendMessage
       SendMessageRequest
@@ -101,9 +106,9 @@ sendMsgTo msg chat =
         , sendMessageParseMode = Nothing
         , sendMessageEntities = Nothing
         , sendMessageDisableWebPagePreview = Nothing
-        , sendMessageDisableNotification = Nothing
+        , sendMessageDisableNotification = Just True
         , sendMessageProtectContent = Nothing
-        , sendMessageReplyToMessageId = Nothing
+        , sendMessageReplyToMessageId = r
         , sendMessageAllowSendingWithoutReply = Nothing
         , sendMessageReplyMarkup = Nothing
         }
