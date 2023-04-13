@@ -64,7 +64,7 @@ whitelist :: Text
 whitelist = nfc (numbers <> apl <> asсii <> unicode)
  where
   numbers = "1234567890"
-  apl = "↔↕️↩️"
+  apl = "↙↖↔↕️↩️"
   asсii = "*#©®"
   unicode = "™♀♂"
 
