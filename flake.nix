@@ -15,26 +15,27 @@
       let
         pkgs = nixpkgs.legacyPackages.${system};
 
-        haskellPackages = pkgs.haskell.packages.ghc902;
+        haskellPackages = pkgs.haskell.packages.ghc927;
 
         packageName = "anti-emoji-bot";
       in {
         packages.${packageName} =
           haskellPackages.callCabal2nix packageName self rec {
-            text-icu = haskellPackages.text-icu_0_8_0_1;
-           };
+          };
+
+        legacyPackages = pkgs;
 
         defaultPackage = self.packages.${system}.${packageName};
 
         devShell = pkgs.mkShell {
           buildInputs = with pkgs; [
-            haskellPackages.haskell-language-server
-            pkg-config
             cabal-install
+            pkg-config
             zlib
             icu
+            haskellPackages.haskell-language-server
           ];
-          inputsFrom = builtins.attrValues self.packages.${system};
+          inputsFrom = map (x: x.env) (builtins.attrValues self.packages.${system});
         };
 
         nixosModules.default = with pkgs.lib; { config, ... }:
