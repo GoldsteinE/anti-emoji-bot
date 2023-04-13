@@ -51,7 +51,7 @@
             config = mkIf cfg.enable {
               systemd.services.emojiBot = {
                 wantedBy = [ "multi-user.target" ];
-                serviceConfig.ExecStart = "${self.defaultPackage.${system}}/bin/haskell-stuff";
+                serviceConfig.ExecStart = "${self.defaultPackage.${system}}/bin/anti-emoji-bot";
                 serviceConfig.EnvironmentFile = cfg.envFile;
               };
             };
