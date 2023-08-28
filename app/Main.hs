@@ -107,7 +107,7 @@ handleAction action model = case action of
 buildDump :: UserName -> Text
 buildDump Nothing = "Я не понимаю, что происходит"
 buildDump (Just user) =
-  user <> " попытался отправить эмодзи, но доблестные силы контр-разведки его перехватили. Literally 1984!"
+  "Тщетные попытки " <> user <> " отправить эмодзи были сорваны доблестными силами контрразведки. Literally 1984!"
 
 sendMsgTo :: Text -> ChatId -> Maybe MessageId -> BotM ()
 sendMsgTo msg chat r =
