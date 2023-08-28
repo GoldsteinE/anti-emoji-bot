@@ -127,7 +127,7 @@ sendMsgTo msg chat r =
         }
 
 bulidMsg :: UserName -> Text -> Text
-bulidMsg user t = maybe id (\name t' -> name <> " сказал, что:\n" <> t') user (T.filter (not . isEmoji) t)
+bulidMsg user t = maybe id (\name t' -> name <> " молвит:\n" <> t') user (T.filter (not . isEmoji) t)
 
 run :: Token -> IO ()
 run token = do
