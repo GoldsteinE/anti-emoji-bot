@@ -118,11 +118,9 @@ sendMsgTo msg chat r =
         , sendMessageText = msg
         , sendMessageParseMode = Nothing
         , sendMessageEntities = Nothing
-        , sendMessageDisableWebPagePreview = Nothing
         , sendMessageDisableNotification = Just True
         , sendMessageProtectContent = Nothing
         , sendMessageReplyToMessageId = r
-        , sendMessageAllowSendingWithoutReply = Nothing
         , sendMessageReplyMarkup = Nothing
         }
 

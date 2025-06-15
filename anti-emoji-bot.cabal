@@ -11,6 +11,7 @@ executable anti-emoji-bot
 
   build-depends:
     , base
+    , telegram-bot-api
     , telegram-bot-simple
     , text
     , text-icu

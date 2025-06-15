@@ -6,7 +6,7 @@
   description = "Anti emoji bot";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
@@ -15,15 +15,11 @@
       let
         pkgs = nixpkgs.legacyPackages.${system};
 
-        haskellPackages = pkgs.haskell.packages.ghc927;
+        haskellPackages = pkgs.haskell.packages.ghc984;
 
         packageName = "anti-emoji-bot";
       in {
-        packages.${packageName} =
-          haskellPackages.callCabal2nix packageName self rec {
-          };
-
-        legacyPackages = pkgs;
+        packages.${packageName} = haskellPackages.callCabal2nix packageName self { };
 
         defaultPackage = self.packages.${system}.${packageName};
 
