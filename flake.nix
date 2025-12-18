@@ -15,7 +15,7 @@
       let
         pkgs = nixpkgs.legacyPackages.${system};
 
-        haskellPackages = pkgs.haskell.packages.ghc984;
+        haskellPackages = pkgs.haskell.packages.ghc9103;
 
         packageName = "anti-emoji-bot";
       in {
